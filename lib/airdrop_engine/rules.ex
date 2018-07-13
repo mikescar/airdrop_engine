@@ -8,7 +8,7 @@ defmodule AirdropEngine.Rules do
   def both_players_islands_set?(rules), do:
     rules.player1 == :islands_set && rules.player2 == :islands_set
 
-  # TODO use :get_statem library
+  # TODO use :gen_statem library?
   def check(%Rules{state: :initialized} = rules, :add_player), do:
     {:ok, %Rules{rules | state: :players_set}}
   def check(%Rules{state: :players_set} = rules, {:position_islands, player}) do

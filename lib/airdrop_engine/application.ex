@@ -8,6 +8,7 @@ defmodule AirdropEngine.Application do
   def start(_type, _args) do
     # List all child processes to be supervised
     children = [
+      {Registry, keys: :unique, name: Registry.Game}
       # Starts a worker by calling: AirdropEngine.Worker.start_link(arg)
       # {AirdropEngine.Worker, arg},
     ]
