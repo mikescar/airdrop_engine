@@ -1,9 +1,10 @@
 defmodule AirdropEngine.Game do
-  use GenServer
+  use GenServer, start: {__MODULE__, :start_link, []}, restart: :transient
 
   alias AirdropEngine.{Board, Coordinate, Guesses, Island, Rules}
 
   @players [:player1, :player2]
+  @timeout 15000
 
   def add_player(game, name) when is_binary(name), do: GenServer.call(game, {:add_player, name})
 
@@ -60,10 +61,21 @@ defmodule AirdropEngine.Game do
     {:noreply, state}
   end
 
+  def handle_info({:set_state, name}, _state) do
+    state =
+      case :ets.lookup(:game_state, name) do
+        [] -> fresh_state(name)
+        [{_key, state}] -> state
+      end
+
+    :ets.insert(:game_state, {name, state})
+
+    {:noreply, state, @timeout}
+  end
+
   def init(name) do
-    player1 = %{name: name, board: Board.new(), guesses: Guesses.new()}
-    player2 = %{name: nil,  board: Board.new(), guesses: Guesses.new()}
-    {:ok, %{player1: player1, player2: player2, rules: %Rules{}}}
+    send(self(), {:set_state, name})
+    {:ok, fresh_state(name)}
   end
 
   def position_island(game, player, key, row, col) when player in @players, do:
@@ -74,13 +86,28 @@ defmodule AirdropEngine.Game do
 
   def start_link(name) when is_binary(name), do: GenServer.start_link(__MODULE__, name, name: via_tuple(name))
 
+  def terminate({:shutdown, :timeout}, state) do
+    :ets.delete(:game_state, state.player1.name)
+    :ok
+  end
+  def terminate(_reason, _state), do: :ok
+
   def via_tuple(name), do: {:via, Registry, {Registry.Game, name}}
 
   # Private
 
+  defp fresh_state(name) do
+    player1 = %{name: name, board: Board.new(), guesses: Guesses.new()}
+    player2 = %{name: nil, board: Board.new(), guesses: Guesses.new()}
+    %{player1: player1, player2: player2, rules: %Rules{}}
+  end
+
   defp player_board(state, player), do: Map.get(state, player).board
 
-  defp reply_success(state, reply), do: {:reply, reply, state}
+  defp reply_success(state, reply) do
+    :ets.insert(:game_state, {state.player1.name, state})
+    {:reply, reply, state, @timeout}
+  end
 
   defp update_board(state, player, board), do:
     Map.update!(state, player, fn player -> %{player | board: board} end)
