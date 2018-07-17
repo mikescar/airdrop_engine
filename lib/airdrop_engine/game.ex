@@ -52,15 +52,6 @@ defmodule AirdropEngine.Game do
     end
   end
 
-  def handle_cast({:demo_cast, new_value}, state) do
-    {:noreply, Map.put(state, :testss, new_value)}
-  end
-
-  def handle_info(msg, state) do
-    IO.puts "This message handled by #{__MODULE__}, matching on #{msg}"
-    {:noreply, state}
-  end
-
   def handle_info({:set_state, name}, _state) do
     state =
       case :ets.lookup(:game_state, name) do
@@ -71,6 +62,10 @@ defmodule AirdropEngine.Game do
     :ets.insert(:game_state, {name, state})
 
     {:noreply, state, @timeout}
+  end
+  def handle_info(msg, state) do
+    IO.puts "This message handled by #{__MODULE__}, matching on #{msg}"
+    {:noreply, state}
   end
 
   def init(name) do
