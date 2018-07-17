@@ -3,6 +3,9 @@ defmodule AirdropEngine.Board do
 
   def new(), do: %{}
 
+  def all_islands_positioned?(board), do:
+    Enum.all?(Island.types, &(Map.has_key?(board, &1)))
+
   def guess(board, %Coordinate{} = coordinate) do
     board
     |> check_all_islands(coordinate)
