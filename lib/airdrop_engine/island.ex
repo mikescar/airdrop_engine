@@ -39,9 +39,9 @@ defmodule AirdropEngine.Island do
 
   defp offsets(:atoll), do: [{0, 0}, {0, 1}, {1, 1}, {2, 0}, {2, 1}]
   defp offsets(:dot), do: [{0, 0}]
-  defp offsets(:letter_l), do: [{0, 0}, {0, 1}, {0, 2}, {2, 1}]
+  defp offsets(:l_shape), do: [{0, 0}, {0, 1}, {0, 2}, {2, 1}]
   defp offsets(:square), do: [{0, 0}, {0, 1}, {1, 0}, {1, 1}]
-  defp offsets(:tetris_s), do: [{0, 1}, {0, 2}, {1, 0}, {1, 1}]
+  defp offsets(:s_shape), do: [{0, 1}, {0, 2}, {1, 0}, {1, 1}]
   defp offsets(_), do: {:error, :invalid_island_type}
 
   def overlaps?(existing_island, new_island), do:
@@ -49,5 +49,5 @@ defmodule AirdropEngine.Island do
 
   def served?(island), do: MapSet.equal?(island.coordinates, island.hit_coordinates)
 
-  def types(), do: [:atoll, :dot, :letter_l, :tetris_s, :square]
+  def types(), do: [:atoll, :dot, :l_shape, :s_shape, :square]
 end
