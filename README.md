@@ -26,7 +26,8 @@ If successful, you'll see: `Compiling 1 file (.ex)`, and a compilation error mes
 
 
 ## TODO
-- Add postgres persistence across BEAM restarts and process timeouts
+- Add tests!
+- Add airdrop types (patterns that don't just cover one tile) & different tile images
 - Add canned settings for difficulty levels.
 
 
