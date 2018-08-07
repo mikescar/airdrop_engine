@@ -1,5 +1,3 @@
-# AirdropEngine
-
 This game engine is based on the "Game of Islands" described in [*Functional Web Development with Elixir, OTP, and Phoenix*](https://pragprog.com/book/lhelph/functional-web-development-with-elixir-otp-and-phoenix),
 by Lance Halvorsen (Pragmatic Bookshelf).
 
@@ -26,13 +24,11 @@ Add a development dependency for [remix](https://github.com/AgilionApps/remix), 
 your code is recompiled after each file save and ready to use by the time you've tabbed back to your terminal.
 If successful, you'll see: `Compiling 1 file (.ex)`, and a compilation error message otherwise.
 
-**TODO: Add postgres persistence across BEAM restarts, don't delete data on Game process timeout**
 
-**TODO: Add browser layer**
+## TODO
+- Add postgres persistence across BEAM restarts and process timeouts
+- Add canned settings for difficulty levels.
 
-**TODO: Add airdrop types (patterns that don't just cover one tile) & different images**
-
-**TODO: Add canned settings for difficulty levels.**
 
 ## Installation
 
